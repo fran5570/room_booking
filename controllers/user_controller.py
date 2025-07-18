@@ -33,3 +33,12 @@ class UserController:
         else:
             print("⚠️ User not found.")
             return None
+
+    def delete_user(self, user_id: int):
+        try:
+            cursor = self.conn.cursor()
+            cursor.execute("DELETE FROM users WHERE user_id = ?", (user_id,))
+            self.conn.commit()
+            print("🗑️ Usuario eliminado correctamente.")
+        except Exception as e:
+            print("❌ Error deleting user:", e)
