@@ -33,6 +33,6 @@ def main():
         else:
             print("⚠️ Invalid option.")
 
-# 👇 Esto ejecuta el menú al correr python main.py
+
 if __name__ == "__main__":
     main()
