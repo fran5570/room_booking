@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  reserva:
+    image: reserva-salas
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./room_booking.db:/app/room_booking.db
+    stdin_open: true
+    tty: true
