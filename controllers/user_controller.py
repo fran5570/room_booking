@@ -1,5 +1,6 @@
 from data.storage import Database
 
+
 class UserController:
     def __init__(self, db: Database):
         self.conn = db.get_connection()
@@ -7,7 +8,9 @@ class UserController:
     def create_user(self, name: str, email: str):
         cursor = self.conn.cursor()
         try:
-            cursor.execute("INSERT INTO users (name, email) VALUES (?, ?)", (name, email))
+            cursor.execute(
+                "INSERT INTO users (name, email) VALUES (?, ?)", (name, email)
+            )
             self.conn.commit()
             print("✅ User created successfully.")
         except Exception as e:

@@ -1,5 +1,6 @@
 from data.storage import Database
 
+
 class RoomController:
     def __init__(self, db: Database):
         self.conn = db.get_connection()
@@ -7,7 +8,9 @@ class RoomController:
     def create_room(self, name: str, capacity: int):
         cursor = self.conn.cursor()
         try:
-            cursor.execute("INSERT INTO rooms (name, capacity) VALUES (?, ?)", (name, capacity))
+            cursor.execute(
+                "INSERT INTO rooms (name, capacity) VALUES (?, ?)", (name, capacity)
+            )
             self.conn.commit()
             print("✅ Room created successfully.")
         except Exception as e:

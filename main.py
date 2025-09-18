@@ -2,6 +2,7 @@ from views.console_menu import user_menu, room_menu, reservation_menu
 from controllers.user_controller import UserController
 from data.storage import Database
 
+
 def main():
     db = Database()
     controller = UserController(db)

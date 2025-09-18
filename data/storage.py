@@ -1,5 +1,6 @@
 import sqlite3
 
+
 class Database:
     def __init__(self, db_name="room_booking.db"):
         self.conn = sqlite3.connect(db_name)

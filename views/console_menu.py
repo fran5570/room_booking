@@ -39,6 +39,7 @@ def user_menu():
         else:
             print("⚠️ Invalid option.")
 
+
 def room_menu():
     db = Database()
     room_controller = RoomController(db)
@@ -113,7 +114,9 @@ def reservation_menu():
             date = input("Enter date (YYYY-MM-DD): ")
             start = input("Start time (HH:MM): ")
             end = input("End time (HH:MM): ")
-            reservation_controller.create_reservation(user_id, room_id, date, start, end)
+            reservation_controller.create_reservation(
+                user_id, room_id, date, start, end
+            )
 
         elif option == "2":
             reservation_controller.list_reservations()
@@ -137,4 +140,3 @@ def reservation_menu():
 
         else:
             print("⚠️ Invalid option.")
-
