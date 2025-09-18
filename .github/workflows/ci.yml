@@ -57,9 +57,18 @@ jobs:
           path: artifacts
 
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04   # cambia el image también (ver opción 2)
     needs: test
     steps:
+      - name: Free disk space (logs + SDKs pesados)
+        run: |
+          sudo rm -rf /usr/local/lib/android || true
+          sudo rm -rf /usr/share/dotnet || true
+          sudo rm -rf /opt/ghc || true
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY" || true
+          sudo journalctl --rotate || true
+          sudo journalctl --vacuum-time=1s || true
+          df -h
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
@@ -74,4 +83,5 @@ jobs:
           name: dist
           path: dist
           retention-days: 5
+
 
