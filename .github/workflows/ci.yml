@@ -47,8 +47,6 @@ jobs:
           mkdir -p artifacts
           pytest -q \
             --cov=. \
-            --cov-report=xml:artifacts/coverage.xml \
-            --cov-report=html:artifacts/htmlcov \
             --junitxml=artifacts/junit.xml
       - name: Upload test & coverage artifacts
         uses: actions/upload-artifact@v4
@@ -57,8 +55,7 @@ jobs:
           path: artifacts
 
   build:
-    runs-on: ubuntu-22.04   # cambia el image también (ver opción 2)
-    needs: test
+    runs-on: ubuntu-22.04  
     steps:
       - name: Free disk space (logs + SDKs pesados)
         run: |
