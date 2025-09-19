@@ -23,7 +23,6 @@ class HealthHandler(BaseHTTPRequestHandler):
         else:
             self.send_error(404, "Not Found")
 
-    
     def log_message(self, format, *args):  # noqa: A003
         return
 
@@ -34,6 +33,7 @@ def start_health_server(host: str = "127.0.0.1", port: int = 8000):
     t = threading.Thread(target=httpd.serve_forever, daemon=True)
     t.start()
     return httpd, t
+
 
 if __name__ == "__main__":
     print("Servidor de health corriendo en http://127.0.0.1:8000/health")
