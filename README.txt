@@ -35,3 +35,15 @@ Ejecución con Docker Compose (opcional):
 docker-compose run --rm reserva
 
 
+##  Pipeline CI
+El proyecto incluye un workflow en **GitHub Actions** (`.github/workflows/ci.yml`) que corre automáticamente en cada push/PR:
+1. **Lint** → verificación de estilo con Ruff.  
+2. **Tests** → ejecución de pruebas unitarias con pytest + cobertura.  
+3. **Build** → generación de un ejecutable `.pyz` en la carpeta `dist/`.
+
+##  Endpoint de Health Check
+El servicio expone un endpoint de health en:
+- python -m controllers.health_controller
+
+## para correr los test localmente:
+pytest -q --cov=.
