@@ -1,11 +1,42 @@
-# Base de datos SQLite
+# ============================
+# Archivos de base de datos
+# ============================
 *.db
 
+# ============================
 # Archivos temporales de Python
+# ============================
 __pycache__/
 *.py[cod]
 *.log
 
+# ============================
+# Caches de herramientas
+# ============================
+.pytest_cache/
+.ruff_cache/
+.coverage
+
+# ============================
 # Entornos virtuales
+# ============================
 venv/
+.venv/
+env/
 .env/
+
+# ============================
+# Artefactos de build y dist
+# ============================
+dist/
+build/
+artifacts/
+htmlcov/
+
+# ============================
+# Archivos del sistema/IDE
+# ============================
+.DS_Store
+.idea/
+.vscode/
+
