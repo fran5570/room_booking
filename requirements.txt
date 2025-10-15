@@ -1,1 +1,2 @@
 # No se requieren dependencias externas. Proyecto desarrollado solo con la librería estándar de Python.
+redis==5.0.1

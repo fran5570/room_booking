@@ -1,4 +1,5 @@
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from data.redis_client import get_redis_connection
 import json
 import threading
 import time
@@ -12,7 +13,12 @@ class HealthHandler(BaseHTTPRequestHandler):
             payload = {
                 "status": "ok",
                 "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                "client_ip": self.client_address[0],
             }
+
+            r = get_redis_connection()
+            r.rpush("health_requests", json.dumps(payload))
+
             body = json.dumps(payload).encode("utf-8")
             self.send_response(200)
             self.send_header("Content-Type", "application/json; charset=utf-8")
