@@ -1,4 +1,4 @@
-from http.server import HTTPServer, BaseHTTPRequestHandler
+from http.server import HTTPServer
 from controllers.health_controller import HealthHandler
 from controllers.responses_controller import ResponsesHandler
 
