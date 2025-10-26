@@ -41,7 +41,7 @@ jobs:
           pip install pytest pytest-cov requests redis ruff
 
       - name: Run Ruff (Lint)
-        run: ruff check .
+        run: ruff check . --fix
 
       - name: Run Tests with Coverage
         run: |
@@ -60,12 +60,13 @@ jobs:
       - name: Build App (zip)
         run: |
           mkdir -p dist
-          python -c "from zipapp import create_archive; create_archive('.', target='dist/room_booking.pyz', main='main:main')"
+          zip -r dist/room_booking.zip . \
+            -x "venv/*" "__pycache__/*" ".pytest_cache/*" ".git/*" "*.db" "artifacts/*" "dist/*"
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
-          name: dist
+          name: build
           path: dist
           retention-days: 5
 
