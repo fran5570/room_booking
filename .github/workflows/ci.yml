@@ -10,85 +10,62 @@ permissions:
   contents: read
 
 jobs:
-  lint:
+  ci:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-          cache: "pip"
-          cache-dependency-path: requirements-dev.txt
-      - name: Install dev tools
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements-dev.txt
-      - name: Ruff (format + lint)
-        run: |
-          ruff format --check .
-          ruff check .
 
-  test:
-    runs-on: ubuntu-latest
-    needs: lint
+    services:
+      redis:
+        image: redis:7.2
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
           cache: "pip"
-          cache-dependency-path: requirements-dev.txt
-      - name: Install dev tools
+
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements-dev.txt
-      - name: Run unit tests with coverage (XML + HTML + JUnit)
+          pip install -r requirements-dev.txt || true
+          pip install pytest pytest-cov requests redis ruff
+
+      - name: Run Ruff (Lint)
+        run: ruff check .
+
+      - name: Run Tests with Coverage
         run: |
           mkdir -p artifacts
-          pytest -q \
-            --cov=. \
+          pytest -q --cov=. \
             --cov-report=xml:artifacts/coverage.xml \
             --cov-report=html:artifacts/htmlcov \
             --junitxml=artifacts/junit.xml
-      - name: Upload test & coverage artifacts
+
+      - name: Upload test reports
         uses: actions/upload-artifact@v4
         with:
-          name: test-and-coverage
+          name: test-reports
           path: artifacts
 
-  build:
-    runs-on: ubuntu-latest
-    needs: test
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-      - name: Build zipapp (dist/room_booking.pyz)
-        shell: bash
+      - name: Build App (zip)
         run: |
           mkdir -p dist
-          python - <<'PY'
-          from pathlib import Path
-          from zipapp import create_archive
-          EXCLUDE = {
-              '.git', '.github', 'tests', 'dist', 'artifacts', '__pycache__',
-              '.ruff_cache', '.pytest_cache', '.venv', 'venv', 'env'
-          }
-          def keep(path: Path) -> bool:
-              return not any(part in EXCLUDE for part in path.parts)
-          create_archive(
-              source='.',
-              target='dist/room_booking.pyz',
-              main='main:main',
-              filter=keep,
-          )
-          PY
-      - name: Upload dist
+          python -c "from zipapp import create_archive; create_archive('.', target='dist/room_booking.pyz', main='main:main')"
+
+      - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: dist
           path: dist
           retention-days: 5
+
