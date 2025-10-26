@@ -1,49 +1,105 @@
-# Sistema de Reserva de Salas
+# 🏨 Sistema de Reserva de Salas
 
-Este es un sistema de reservas de salas de reuniones, desarrollado con **Python**  bajo el paradigma de **Programación Orientada a Objetos (POO)** y utilizando el patrón de diseño **MVC (Modelo - Vista - Controlador)**.
+[![CI](https://github.com/fran5570/room_booking/actions/workflows/ci.yml/badge.svg)](https://github.com/fran5570/room_booking/actions)
+
+Sistema de reservas de salas de reuniones, desarrollado con **Python** bajo el paradigma de **Programación Orientada a Objetos (POO)** y el patrón de diseño **MVC (Modelo - Vista - Controlador)**.  
+Incluye **integración con Redis**, **API HTTP con endpoints de monitoreo**, y un **pipeline CI/CD automatizado con GitHub Actions**.
+
 ---
 
 ## Funcionalidades principales
 
-- Crear, listar y buscar usuarios.
-- Crear y listar salas.
-- Realizar reservas de salas con validación de solapamiento de horarios.
-- Consultar reservas por usuario o por sala.
-- Persistencia de datos con SQLite (también en Docker).
+- Crear, listar y buscar usuarios.  
+- Crear y listar salas.  
+- Realizar reservas de salas con validación de horarios.  
+- Consultar reservas por usuario o sala.  
+- Persistencia de datos con **SQLite** (soporte Docker).  
+- Endpoints `/health`, `/get-responses` y `/clear-responses` integrados con **Redis**.  
 
-
-
----
+################################################################################################################
 
 ## Tecnologías utilizadas
 
-- Python 3.12
-- SQLite
-- Docker (opcional)
-- Docker Compose (opcional)
+- **Python 3.12**  
+- **SQLite**  
+- **Redis (vía Docker)**  
+- **Docker / Docker Compose**  
+- **Pytest / Ruff / CodeQL**
 
----
+#################################################################################################################
 
-## ▶Ejecución local (sin Docker)
+## ▶ Ejecución local (sin Docker)
 
-1. Asegurate de tener Python 3.12 instalado.
-2. Cloná este repositorio
-3. ejecuta:
+1. Asegurate de tener **Python 3.12+** instalado.  
+2. Cloná este repositorio:
+```bash
+git clone https://github.com/fran5570/room_booking.git
+cd room_booking
+
+3. Instalá las dependencias:
+```bash
+pip install -r requirements.txt
+
+
+4. Ejecutá la aplicación principal:
+```bash
 python main.py
 
-Ejecución con Docker Compose (opcional):
-docker-compose run --rm reserva
+
+O levantá el servidor HTTP (modo endpoints REST):
+python server.py
 
 
-##  Pipeline CI
-El proyecto incluye un workflow en **GitHub Actions** (`.github/workflows/ci.yml`) que corre automáticamente en cada push/PR:
-1. **Lint** → verificación de estilo con Ruff.  
-2. **Tests** → ejecución de pruebas unitarias con pytest + cobertura.  
-3. **Build** → generación de un ejecutable `.pyz` en la carpeta `dist/`.
+##################################################################################################################
 
-##  Endpoint de Health Check
-El servicio expone un endpoint de health en:
-- python -m controllers.health_controller
+5. Ejecución con Docker Compose
 
-## para correr los test localmente:
+Asegurate de tener Docker Desktop en ejecución.
+
+Iniciá los servicios:
+```bash
+docker-compose up -d
+
+
+#####################################################################################################################
+
+
+6. Pruebas automáticas:
+```bash
 pytest -q --cov=.
+
+
+####################################################################################################################
+El proyecto incluye tests para:
+
+/health
+
+/get-responses
+
+/clear-responses
+
+Persistencia y validación con Redis
+
+
+Pipeline CI/CD (GitHub Actions)
+
+El flujo automático (.github/workflows/ci.yml) ejecuta:
+
+Lint: Verifica y corrige estilo con Ruff.
+
+Test: Corre pytest con Redis activo en contenedor.
+
+Build: Genera un paquete comprimido (room_booking.zip).
+
+CodeQL: Analiza seguridad y vulnerabilidades del código.
+
+###############################################################################################################
+Artefactos generados
+
+Después de cada ejecución del pipeline:
+
+dist/room_booking.zip → Build comprimido del proyecto.
+
+artifacts/coverage.xml → Reporte de cobertura.
+
+artifacts/htmlcov/ → Reporte HTML navegable.
